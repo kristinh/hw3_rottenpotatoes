@@ -12,9 +12,16 @@ end
 #   on the same page
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
+#  puts page.body
+#  puts page.has_content?(e1)
+#  save_and_open_page
+  if page.has_content?(e1) && page.has_content?(e2)
+    assert page.body.index(e1) < page.body.index(e2)
+  else
+    assert false, "Content missing: #{e1}, #{e2}"
   #  ensure that that e1 occurs before e2.
   #  page.content  is the entire content of the page as a string.
-  assert false, "Unimplmemented"
+  end
 end
 
 When /^(?:|I )check the "([^"]*)" rating$/ do |field|
@@ -50,4 +57,3 @@ Then /I should see none of the movies/ do
   rows = page.all(:xpath, "//table[@id='movies']/tbody/tr").size
   assert_equal 0, rows
 end
-
